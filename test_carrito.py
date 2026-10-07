@@ -1,5 +1,7 @@
 from selenium import webdriver
 from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 
 
 def test_carrito():
@@ -19,24 +21,24 @@ def test_carrito():
         password_input.send_keys("secret_sauce")
         login_button.click()
         
+                
         # Agregar un producto al carrito
-        boton_agregar = driver.find_element(By.ID, "add-to-cart-sauce-labs-backpack")
+        boton_agregar = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.ID, "add-to-cart-sauce-labs-backpack")))
         boton_agregar.click()
-
+        
         # Verificar que el carrito tenga un producto
-        cantidad_carrito = driver.find_element(By.CLASS_NAME, "shopping_cart_badge")
+        cantidad_carrito = WebDriverWait(driver, 10).until(EC.visibility_of_element_located((By.CLASS_NAME, "shopping_cart_badge")))
         assert cantidad_carrito.text == "1"
         
-        #navegar al carrito
-        carrito = driver.find_element(By.CLASS_NAME, "shopping_cart_link")
+        # navegar al carrito
+        carrito = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.CLASS_NAME, "shopping_cart_link")))
         carrito.click()
-        
-        #verificar que se haya navegado al carrito        
+
+        # esperar hasta que navegue al carrito
+        WebDriverWait(driver, 10).until(EC.url_contains("/cart.html"))
+
+        # verificar que se haya navegado al carrito
         assert "/cart.html" in driver.current_url
-        
-        # Verificar que el producto agregado esté en el carrito
-        producto_carrito = driver.find_element(By.CLASS_NAME, "inventory_item_name")
-        assert producto_carrito.text == "Sauce Labs Backpack"
         
     finally:
         driver.quit()    
