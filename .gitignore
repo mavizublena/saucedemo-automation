@@ -1,0 +1,6 @@
+Lib/
+Scripts/
+Include/
+__pycache__/
+.pytest_cache/
+*.pyc
